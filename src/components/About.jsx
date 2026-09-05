@@ -124,7 +124,7 @@ const About = () => {
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-500 to-cyan-400 p-[2px] shadow-lg shadow-purple-500/30">
                   <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-                    <span className="text-2xl font-bold font-mono text-cyan-400">GD</span>
+                    <span className="text-2xl font-bold font-mono text-cyan-400">DG</span>
                   </div>
                 </div>
                 <div>

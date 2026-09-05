@@ -1,5 +1,8 @@
+import { profileLinks } from './profileLinks';
+import { projectLinks } from './projects';
+
 export const personalInfo = {
-  name: "Gannamani Dhruvika",
+  name: "Dhruvika Gannamani",
   displayName: "Dhruvika.",
   title: "Computer Science Student | Full Stack Developer | AI Enthusiast",
   roles: [
@@ -20,11 +23,10 @@ export const personalInfo = {
   cgpa: "9.0",
   email: "dhruvikagannamani@gmail.com",
   socials: {
-    github: "https://github.com/Dhruvika1208",
-    linkedin: "https://linkedin.com/in/dhruvika-gannamani", // standard format link
-    leetcode: "https://leetcode.com/Dhruvika1208",
-    codechef: "https://www.codechef.com/users/dhruvika1208",
-    hackerrank: "https://www.hackerrank.com/dhruvikag"
+    github: profileLinks.github,
+    linkedin: profileLinks.linkedin,
+    leetcode: profileLinks.leetcode,
+    codechef: profileLinks.codechef
   }
 };
 
@@ -121,6 +123,7 @@ export const experienceData = [
     type: "Virtual Internship",
     period: "2024",
     technologies: ["Python", "YOLO", "Streamlit", "Deep Learning", "Computer Vision"],
+    githubLink: projectLinks.leafDisease,
     points: [
       "Developed a deep learning-based plant leaf disease detection system using YOLO for real-time image classification.",
       "Performed image preprocessing, dataset augmentation, model training, testing, and evaluation metrics validation.",
@@ -135,9 +138,9 @@ export const projectsData = [
   {
     id: "dinespot",
     title: "DineSpot – Smart Restaurant Reservation System",
-    shortDescription: "A full-stack restaurant reservation and management system that allows users to book tables online while helping restaurant operations manage reservations efficiently.",
+    shortDescription: "A MERN stack restaurant reservation and management system that allows users to book tables online while helping restaurant operations manage reservations efficiently.",
     featured: true,
-    category: "Full Stack",
+    category: "MERN Stack",
     techStack: ["MongoDB", "Express.js", "React.js", "Node.js", "JWT", "REST APIs"],
     keyFeatures: [
       "Real-time restaurant table reservations with active table availability status",
@@ -147,11 +150,11 @@ export const projectsData = [
       "Comprehensive reservation management system preventing table booking conflicts",
       "Responsive, sleek user-friendly interface optimized for all device sizes"
     ],
-    githubLink: "https://github.com/Dhruvika1208/Dine_Spot",
+    githubLink: projectLinks.dineSpot,
     liveDemo: null,
     gradient: "from-purple-600/30 via-indigo-600/20 to-blue-600/30",
     glowColor: "#a855f7",
-    badgeText: "Featured Project"
+    badgeText: "MERN Stack Project"
   },
   {
     id: "med-assistant",
@@ -167,7 +170,7 @@ export const projectsData = [
       "Drastically improves response accuracy and minimizes AI hallucinations",
       "Smart reminder scheduling helper logic tailored for prescription guidelines"
     ],
-    githubLink: "https://github.com/Dhruvika1208",
+    githubLink: projectLinks.medAssistant,
     liveDemo: null,
     gradient: "from-cyan-600/30 via-blue-600/20 to-indigo-600/30",
     glowColor: "#06b6d4",
@@ -186,7 +189,7 @@ export const projectsData = [
       "Rule-based decision logic ensuring accurate fitness logic safety",
       "Interactive conversational user interface with context retention"
     ],
-    githubLink: "https://github.com/Dhruvika1208",
+    githubLink: projectLinks.fitnessChatbot,
     liveDemo: null,
     gradient: "from-emerald-600/30 via-teal-600/20 to-cyan-600/30",
     glowColor: "#10b981",
@@ -206,7 +209,7 @@ export const projectsData = [
       "Fully responsive design optimized for mobile and desktop tracking",
       "Persistent state memory retaining record history locally"
     ],
-    githubLink: "https://github.com/Dhruvika1208",
+    githubLink: projectLinks.expenseTracker,
     liveDemo: null,
     gradient: "from-pink-600/30 via-rose-600/20 to-purple-600/30",
     glowColor: "#ec4899",
@@ -218,7 +221,7 @@ export const achievementsData = [
   {
     title: "200+ Problems Solved",
     subtitle: "Data Structures & Algorithms",
-    description: "Successfully solved over 200 DSA problems across competitive platforms like LeetCode, CodeChef, and HackerRank, mastering algorithmic efficiency.",
+    description: "Successfully solved over 200 DSA problems across competitive platforms like LeetCode and CodeChef, mastering algorithmic efficiency.",
     icon: "Target",
     color: "from-purple-500 to-indigo-500"
   },
@@ -325,35 +328,39 @@ export const extracurricularData = [
 
 export const codingProfiles = [
   {
-    name: "LeetCode",
-    handle: "Dhruvika1208",
-    detail: "200+ Solved • DSA & Algorithms",
-    link: "https://leetcode.com/Dhruvika1208",
-    color: "from-amber-500 to-orange-500",
-    iconName: "Code2"
-  },
-  {
     name: "GitHub",
+    username: "Dhruvika1208",
     handle: "Dhruvika1208",
-    detail: "Repositories & Open Source",
-    link: "https://github.com/Dhruvika1208",
+    description: "Explore my projects, code, and development work.",
+    link: profileLinks.github,
     color: "from-purple-500 to-indigo-500",
     iconName: "Github"
   },
   {
+    name: "LeetCode",
+    username: "dhruvika_12",
+    handle: "dhruvika_12",
+    description: "Practice Data Structures, Algorithms, and problem solving.",
+    link: profileLinks.leetcode,
+    color: "from-amber-500 to-orange-500",
+    iconName: "Code2"
+  },
+  {
     name: "CodeChef",
-    handle: "dhruvika1208",
-    detail: "50+ Contests & Stars",
-    link: "https://www.codechef.com/users/dhruvika1208",
+    username: "dhruvika12",
+    handle: "dhruvika12",
+    description: "Competitive programming and problem-solving profile.",
+    link: profileLinks.codechef,
     color: "from-yellow-600 to-amber-700",
     iconName: "ChefHat"
   },
   {
-    name: "HackerRank",
-    handle: "dhruvikag",
-    detail: "Problem Solving Badges",
-    link: "https://www.hackerrank.com/dhruvikag",
-    color: "from-emerald-500 to-green-600",
-    iconName: "Terminal"
+    name: "LinkedIn",
+    username: "Dhruvika Gannamani",
+    handle: "Dhruvika Gannamani",
+    description: "Connect with me and explore my professional journey.",
+    link: profileLinks.linkedin,
+    color: "from-cyan-500 to-blue-600",
+    iconName: "Linkedin"
   }
 ];

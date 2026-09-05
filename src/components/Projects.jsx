@@ -5,11 +5,8 @@ import {
   ExternalLink, 
   Sparkles, 
   ArrowUpRight, 
-  Layers, 
-  Bot, 
   BrainCircuit, 
   UtensilsCrossed, 
-  Pill, 
   Dumbbell, 
   Wallet,
   CheckCircle2,
@@ -23,7 +20,7 @@ const Projects = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [activeModalProject, setActiveModalProject] = useState(null);
 
-  const categories = ['All', 'Full Stack', 'Artificial Intelligence', 'Web Development'];
+  const categories = ['All', 'MERN Stack', 'Artificial Intelligence', 'Web Development'];
 
   const filteredProjects = selectedCategory === 'All'
     ? projectsData
@@ -230,7 +227,8 @@ const Projects = () => {
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 text-white font-bold text-sm shadow-lg shadow-purple-500/30 hover:scale-105 transition-all"
                       >
                         <GithubIcon className="w-4 h-4" />
-                        <span>GitHub Repository</span>
+                        <span>View on GitHub</span>
+                        <ExternalLink className="w-3.5 h-3.5 ml-0.5" />
                       </a>
                     )}
 
@@ -308,27 +306,27 @@ const Projects = () => {
                     ))}
                   </div>
 
-                  <div className="flex items-center justify-between pt-2">
-                    {project.githubLink ? (
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
+                    {project.githubLink && (
                       <a
                         href={project.githubLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-600/20 border border-purple-500/30 text-purple-300 hover:text-white hover:bg-purple-600/40 text-xs font-bold transition-all hover:scale-105 shadow-sm"
+                        aria-label={`View ${project.title} repository on GitHub`}
                       >
-                        <GithubIcon className="w-4 h-4" />
-                        <span>GitHub Repository</span>
+                        <GithubIcon className="w-3.5 h-3.5 text-cyan-400" />
+                        <span>View on GitHub</span>
+                        <ExternalLink className="w-3 h-3 text-cyan-400 ml-0.5" />
                       </a>
-                    ) : (
-                      <span className="text-xs text-slate-500 font-mono">Private Repo</span>
                     )}
 
                     <button
                       onClick={() => setActiveModalProject(project)}
-                      className="text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 text-xs font-semibold transition-all ml-auto"
                     >
-                      <span>Details</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
+                      <span>View Details</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400" />
                     </button>
                   </div>
                 </div>

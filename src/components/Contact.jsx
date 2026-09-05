@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Send, Sparkles, CheckCircle2, Copy, Check, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
-import confetti from 'canvas-confetti';
 import { personalInfo } from '../data/portfolioData';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [fieldErrors, setFieldErrors] = useState({ name: '', email: '', message: '' });
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [status, setStatus] = useState('idle'); // idle | submitting | success | error
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (status !== 'idle') setStatus('idle');
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // Clear field-specific error as user types
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+    if (status !== 'idle') {
+      setStatus('idle');
+    }
   };
 
   const handleCopyEmail = () => {
@@ -22,40 +31,78 @@ const Contact = () => {
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const validateForm = () => {
+    const errors = { name: '', email: '', message: '' };
+    let isValid = true;
 
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      setStatus('error');
-      setErrorMessage('Please fill out all fields before sending.');
-      return;
+    if (!formData.name.trim()) {
+      errors.name = 'Name is required';
+      isValid = false;
     }
 
-    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required';
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      errors.email = 'Please enter a valid email address';
+      isValid = false;
+    }
+
+    if (!formData.message.trim()) {
+      errors.message = 'Message is required';
+      isValid = false;
+    }
+
+    setFieldErrors(errors);
+    return isValid;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
       setStatus('error');
-      setErrorMessage('Please enter a valid email address.');
+      setErrorMessage('Please fix the validation errors below.');
       return;
     }
 
     setStatus('submitting');
+    setErrorMessage('');
 
-    // Simulate sending message
-    setTimeout(() => {
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    // Check if EmailJS environment variables are configured
+    if (!serviceId || !templateId || !publicKey || serviceId === 'your_service_id_here') {
+      console.warn('EmailJS environment variables are missing or unconfigured in .env');
+      setStatus('error');
+      setErrorMessage('Email service configuration missing. Please add EmailJS keys to your .env file or email me directly.');
+      return;
+    }
+
+    const templateParams = {
+      from_name: formData.name.trim(),
+      from_email: formData.email.trim(),
+      reply_to: formData.email.trim(),
+      to_email: 'dhruvikagannamani@gmail.com',
+      message: formData.message.trim(),
+      subject: `New Portfolio Contact — ${formData.name.trim()}`
+    };
+
+    try {
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      
+      // On SUCCESS: Show subtle success message & reset form inputs
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
-
-      // Trigger Confetti!
-      try {
-        confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#a855f7', '#06b6d4', '#ec4899', '#3b82f6']
-        });
-      } catch (err) {
-        // ignore fallback
-      }
-    }, 1000);
+      setFieldErrors({ name: '', email: '', message: '' });
+    } catch (err) {
+      console.error('EmailJS Send Error:', err);
+      // On FAILURE: Show error alert & PRESERVE form inputs
+      setStatus('error');
+      setErrorMessage('Something went wrong. Please try again or email me directly.');
+    }
   };
 
   return (
@@ -136,7 +183,7 @@ const Contact = () => {
                     <LinkedinIcon className="w-5 h-5 text-cyan-400" />
                     <div>
                       <div className="text-sm font-bold">LinkedIn</div>
-                      <div className="text-xs text-slate-400 font-mono">dhruvika-gannamani</div>
+                      <div className="text-xs text-slate-400 font-mono">dhruvikagannamani</div>
                     </div>
                   </div>
                   <span className="text-xs text-cyan-400 group-hover:translate-x-1 transition-transform">→</span>
@@ -172,6 +219,7 @@ const Contact = () => {
           >
             <form onSubmit={handleSubmit} className="glass-card rounded-3xl p-8 border border-white/10 space-y-5 shadow-xl">
               
+              {/* Name Field */}
               <div className="space-y-1">
                 <label className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider block">
                   Your Name
@@ -182,10 +230,16 @@ const Contact = () => {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="e.g. Alex Morgan"
-                  className="w-full px-4 py-3 rounded-2xl bg-slate-900/80 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-sm transition-all"
+                  className={`w-full px-4 py-3 rounded-2xl bg-slate-900/80 border ${
+                    fieldErrors.name ? 'border-rose-500/60 focus:border-rose-500' : 'border-white/10 focus:border-purple-500'
+                  } text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500 text-sm transition-all`}
                 />
+                {fieldErrors.name && (
+                  <p className="text-xs text-rose-400 font-mono mt-1">{fieldErrors.name}</p>
+                )}
               </div>
 
+              {/* Email Field */}
               <div className="space-y-1">
                 <label className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider block">
                   Your Email
@@ -196,10 +250,16 @@ const Contact = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="e.g. alex@company.com"
-                  className="w-full px-4 py-3 rounded-2xl bg-slate-900/80 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm transition-all"
+                  className={`w-full px-4 py-3 rounded-2xl bg-slate-900/80 border ${
+                    fieldErrors.email ? 'border-rose-500/60 focus:border-rose-500' : 'border-white/10 focus:border-cyan-500'
+                  } text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 text-sm transition-all`}
                 />
+                {fieldErrors.email && (
+                  <p className="text-xs text-rose-400 font-mono mt-1">{fieldErrors.email}</p>
+                )}
               </div>
 
+              {/* Message Field */}
               <div className="space-y-1">
                 <label className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider block">
                   Message
@@ -209,23 +269,28 @@ const Contact = () => {
                   rows="4"
                   value={formData.message}
                   onChange={handleChange}
-                  placeholder="Hi Dhruvika, I would love to discuss a opportunity..."
-                  className="w-full px-4 py-3 rounded-2xl bg-slate-900/80 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-sm transition-all resize-none"
+                  placeholder="Hi Dhruvika, I would love to discuss an opportunity..."
+                  className={`w-full px-4 py-3 rounded-2xl bg-slate-900/80 border ${
+                    fieldErrors.message ? 'border-rose-500/60 focus:border-rose-500' : 'border-white/10 focus:border-purple-500'
+                  } text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500 text-sm transition-all resize-none`}
                 />
+                {fieldErrors.message && (
+                  <p className="text-xs text-rose-400 font-mono mt-1">{fieldErrors.message}</p>
+                )}
               </div>
 
-              {/* Status Alert Messages */}
+              {/* Status Inline Alerts (NO CONFETTI / NO FULL SCREEN BLAST) */}
               {status === 'error' && (
-                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono flex items-center gap-2.5 transition-all">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
                   <span>{errorMessage}</span>
                 </div>
               )}
 
               {status === 'success' && (
-                <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-                  <span>Thank you! Your message has been sent successfully.</span>
+                <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs sm:text-sm font-mono flex items-center gap-2.5 transition-all animate-in fade-in duration-300">
+                  <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                  <span>✓ Message sent successfully! I'll get back to you soon.</span>
                 </div>
               )}
 
@@ -233,10 +298,10 @@ const Contact = () => {
               <button
                 type="submit"
                 disabled={status === 'submitting'}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 text-white font-bold text-sm shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 text-white font-bold text-sm shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {status === 'submitting' ? (
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-2 font-mono">
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     Sending...
                   </span>

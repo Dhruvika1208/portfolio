@@ -1,7 +1,8 @@
 import React from 'react';
-import { Mail, ArrowUp, Code } from 'lucide-react';
-import { GithubIcon, LinkedinIcon, LeetcodeIcon } from './SocialIcons';
+import { Mail, ArrowUp, Sparkles } from 'lucide-react';
+import { GithubIcon, LinkedinIcon, LeetcodeIcon, CodechefIcon } from './SocialIcons';
 import { personalInfo } from '../data/portfolioData';
+import { profileLinks } from '../data/profileLinks';
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -30,36 +31,50 @@ const Footer = () => {
           {/* Social Links */}
           <div className="flex items-center gap-4">
             <a
-              href={personalInfo.socials.github}
+              href={profileLinks.github}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:border-purple-400 hover:bg-purple-600/20 transition-all"
-              aria-label="GitHub Profile"
+              aria-label="Visit Dhruvika Gannamani's GitHub profile"
+              title="GitHub"
             >
               <GithubIcon className="w-4 h-4" />
             </a>
             <a
-              href={personalInfo.socials.linkedin}
+              href={profileLinks.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-cyan-400 hover:border-cyan-400 hover:bg-cyan-600/20 transition-all"
-              aria-label="LinkedIn Profile"
+              aria-label="Visit Dhruvika Gannamani's LinkedIn profile"
+              title="LinkedIn"
             >
               <LinkedinIcon className="w-4 h-4" />
             </a>
             <a
-              href={personalInfo.socials.leetcode}
+              href={profileLinks.leetcode}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-amber-400 hover:border-amber-400 hover:bg-amber-600/20 transition-all"
-              aria-label="LeetCode Profile"
+              aria-label="Visit Dhruvika Gannamani's LeetCode profile"
+              title="LeetCode"
             >
               <LeetcodeIcon className="w-4 h-4" />
             </a>
             <a
+              href={profileLinks.codechef}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-amber-500 hover:border-amber-500 hover:bg-amber-600/20 transition-all"
+              aria-label="Visit Dhruvika Gannamani's CodeChef profile"
+              title="CodeChef"
+            >
+              <CodechefIcon className="w-4 h-4" />
+            </a>
+            <a
               href={`mailto:${personalInfo.email}`}
               className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-pink-400 hover:border-pink-400 hover:bg-pink-600/20 transition-all"
-              aria-label="Email"
+              aria-label="Send Email"
+              title="Email"
             >
               <Mail className="w-4 h-4" />
             </a>
@@ -81,11 +96,11 @@ const Footer = () => {
           <div className="font-mono flex items-center gap-1.5">
             <span>Designed &amp; Built by</span>
             <span className="text-white font-bold">Dhruvika</span>
-            <span className="text-purple-400">⚡</span>
+            <Sparkles className="w-3.5 h-3.5 text-purple-400" />
           </div>
 
           <div className="text-center sm:text-right font-mono">
-            &copy; 2026 Gannamani Dhruvika. All rights reserved.
+            &copy; 2026 Dhruvika Gannamani. All rights reserved.
           </div>
         </div>
 

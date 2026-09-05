@@ -23,9 +23,3 @@ export const CodechefIcon = ({ className = "w-5 h-5" }) => (
     <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5h-2v-4h2zm0-6h-2v-2h2z" />
   </svg>
 );
-
-export const HackerrankIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M12 0L1.75 6v12L12 24l10.25-6V6L12 0zm-1.5 16.5h-3v-9h3v9zm6 0h-3v-9h3v9z" />
-  </svg>
-);

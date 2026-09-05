@@ -1,16 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink, Sparkles, ArrowUpRight, Terminal } from 'lucide-react';
-import { GithubIcon, LeetcodeIcon, CodechefIcon, HackerrankIcon } from './SocialIcons';
+import { ExternalLink, ArrowUpRight, Terminal } from 'lucide-react';
+import { GithubIcon, LeetcodeIcon, CodechefIcon, LinkedinIcon } from './SocialIcons';
 import { codingProfiles } from '../data/portfolioData';
 
 const getProfileIcon = (iconName) => {
   switch (iconName) {
-    case 'Code2': return <LeetcodeIcon className="w-7 h-7 text-amber-400" />;
     case 'Github': return <GithubIcon className="w-7 h-7 text-purple-300" />;
+    case 'Code2': return <LeetcodeIcon className="w-7 h-7 text-amber-400" />;
     case 'ChefHat': return <CodechefIcon className="w-7 h-7 text-amber-500" />;
-    case 'Terminal': return <HackerrankIcon className="w-7 h-7 text-emerald-400" />;
-    default: return <LeetcodeIcon className="w-7 h-7 text-purple-400" />;
+    case 'Linkedin': return <LinkedinIcon className="w-7 h-7 text-cyan-400" />;
+    default: return <GithubIcon className="w-7 h-7 text-purple-300" />;
   }
 };
 
@@ -32,7 +32,7 @@ const CodingProfiles = () => {
             Coding <span className="gradient-text-cyan-blue">Profiles</span>
           </h2>
           <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
-            Explore my problem-solving track records across major competitive programming and open-source platforms.
+            Explore my problem-solving track records, competitive programming profiles, and professional network.
           </p>
           <div className="w-16 h-1 bg-gradient-to-r from-cyan-400 to-purple-500 mx-auto rounded-full mt-2" />
         </div>
@@ -45,6 +45,7 @@ const CodingProfiles = () => {
               href={profile.link}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`Visit Dhruvika Gannamani's ${profile.name} profile`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -70,12 +71,12 @@ const CodingProfiles = () => {
                     {profile.name}
                   </h3>
                   <div className="text-xs font-mono text-purple-300 mt-0.5">
-                    @{profile.handle}
+                    {profile.handle.startsWith('http') ? profile.handle : `@${profile.handle}`}
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-400 leading-relaxed font-mono">
-                  {profile.detail}
+                <p className="text-xs text-slate-400 leading-relaxed font-sans">
+                  {profile.description}
                 </p>
               </div>
 

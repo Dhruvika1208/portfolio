@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase, Calendar, MapPin, CheckCircle2, Brain, Sparkles, Terminal, Code2 } from 'lucide-react';
+import { Briefcase, Calendar, CheckCircle2, Brain, Terminal, ExternalLink } from 'lucide-react';
+import { GithubIcon } from './SocialIcons';
 import { experienceData } from '../data/portfolioData';
 
 const Experience = () => {
@@ -110,6 +111,22 @@ const Experience = () => {
                         results = model.predict(source=uploaded_image, conf=<span className="text-amber-400">0.85</span>)
                       </p>
                     </div>
+
+                    {/* Internship GitHub Repository Action */}
+                    {exp.githubLink && (
+                      <div className="pt-2 flex items-center justify-start">
+                        <a
+                          href={exp.githubLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 text-white font-bold text-xs shadow-md shadow-purple-500/20 hover:scale-105 transition-all"
+                        >
+                          <GithubIcon className="w-4 h-4" />
+                          <span>View on GitHub</span>
+                          <ExternalLink className="w-3.5 h-3.5 ml-0.5" />
+                        </a>
+                      </div>
+                    )}
 
                   </div>
                 </div>
