@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Send, Sparkles, CheckCircle2, Copy, Check, AlertCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
@@ -61,8 +61,6 @@ const Contact = () => {
     e.preventDefault();
 
     if (!validateForm()) {
-      setStatus('error');
-      setErrorMessage('Please fix the validation errors below.');
       return;
     }
 
@@ -73,11 +71,11 @@ const Contact = () => {
     const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
     const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-    // Check if EmailJS environment variables are configured
-    if (!serviceId || !templateId || !publicKey || serviceId === 'your_service_id_here') {
-      console.warn('EmailJS environment variables are missing or unconfigured in .env');
+    // Gracefully handle unconfigured or missing environment variables
+    if (!serviceId || !templateId || !publicKey || serviceId === 'YOUR_SERVICE_ID' || serviceId === 'your_service_id_here') {
+      console.error("EmailJS configuration is missing.");
       setStatus('error');
-      setErrorMessage('Email service configuration missing. Please add EmailJS keys to your .env file or email me directly.');
+      setErrorMessage('Something went wrong. Please try again or email me directly.');
       return;
     }
 
@@ -99,7 +97,7 @@ const Contact = () => {
       setFieldErrors({ name: '', email: '', message: '' });
     } catch (err) {
       console.error('EmailJS Send Error:', err);
-      // On FAILURE: Show error alert & PRESERVE form inputs
+      // On FAILURE: Show generic friendly message & PRESERVE entered information
       setStatus('error');
       setErrorMessage('Something went wrong. Please try again or email me directly.');
     }
@@ -120,7 +118,7 @@ const Contact = () => {
             <span>Get In Touch</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            Let's Build Something <span className="gradient-text-purple-cyan">Amazing Together</span>
+            Let's <span className="gradient-text-purple-cyan">Talk</span>
           </h2>
           <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto">
             I'm always open to discussing new opportunities, interesting projects, and innovative ideas.
@@ -279,21 +277,6 @@ const Contact = () => {
                 )}
               </div>
 
-              {/* Status Inline Alerts (NO CONFETTI / NO FULL SCREEN BLAST) */}
-              {status === 'error' && (
-                <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono flex items-center gap-2.5 transition-all">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
-                  <span>{errorMessage}</span>
-                </div>
-              )}
-
-              {status === 'success' && (
-                <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs sm:text-sm font-mono flex items-center gap-2.5 transition-all animate-in fade-in duration-300">
-                  <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                  <span>✓ Message sent successfully! I'll get back to you soon.</span>
-                </div>
-              )}
-
               {/* Submit Button */}
               <button
                 type="submit"
@@ -312,6 +295,37 @@ const Contact = () => {
                   </>
                 )}
               </button>
+
+              {/* Status Message (Subtle, below the button) */}
+              <AnimatePresence>
+                {status === 'success' && (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                    className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs sm:text-sm font-mono flex items-center gap-2.5"
+                  >
+                    <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                    <span>✓ Message sent successfully! I'll get back to you soon.</span>
+                  </motion.div>
+                )}
+
+                {status === 'error' && (
+                  <motion.div
+                    key="error"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                    className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono flex items-center gap-2.5"
+                  >
+                    <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
+                    <span>{errorMessage || 'Something went wrong. Please try again or email me directly.'}</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
             </form>
           </motion.div>
